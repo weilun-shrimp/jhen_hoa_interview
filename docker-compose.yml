@@ -1,0 +1,42 @@
+version: '3.9'
+
+services:
+    mysql8:
+        image: mysql:8.0.29
+        command: --default-authentication-plugin=mysql_native_password
+        container_name: wl_interview_mysql8
+        restart: always
+        ports:
+            - 3307:3306
+        environment:
+            MYSQL_ALLOW_EMPTY_PASSWORD: yes
+            MYSQL_ROOT_PASSWORD: helloworld
+            MYSQL_DATABASE: wl_interview
+        volumes: 
+            - ./sql:/var/lib/mysql
+        networks:
+            - backend
+        # hostname: db # designate container network host name , if not set, default is container name
+
+
+    php_apache:
+        # image: my_test
+        # image: php:8.1-apache
+        
+        build: . # 可以指定Dockerfile build image
+        container_name: wl_interview_php_apache
+        restart: always
+        ports: 
+            - 8080:80
+        volumes:
+            - 'C://xampp/htdocs/laravel_interview/src:/var/www/html'
+            # - './conf/000-default.conf:/etc/apache2/sites-available/000-default.conf
+        depends_on:
+            - mysql8
+        networks:
+            - backend
+
+networks:
+    backend:
+        driver: bridge
+    
