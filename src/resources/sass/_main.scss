@@ -1,0 +1,12 @@
+main#mainContent {
+    position: relative;
+    top: $header-height;
+    left: $sidebar-width;
+    min-height: calc(100vh - #{$header-height});
+    max-width: calc(100vw - #{$sidebar-width});
+
+    &.full {
+        max-width: 100vw;
+        left: 0;
+    }
+}

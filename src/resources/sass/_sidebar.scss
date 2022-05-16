@@ -1,0 +1,59 @@
+nav#sidebar {
+    position: absolute;
+    left: 0;
+    top: $header-height;
+    width: $sidebar-width;
+    border-right: 1px solid #000000;
+    overflow: hidden;
+    height: calc(100vh - #{$header-height});
+    padding-top: 1em;
+
+    * {
+        transition: all $default_transition_sec;
+    }
+
+    a {
+        text-decoration: none;
+        color: #000000;
+
+        &.match {
+            color: #0d6efd;
+        }
+    }
+
+    ul {
+        list-style-type: none;
+        padding-left: 0;
+    }
+
+    > ul {
+
+        > li {
+            padding-left: 45px;
+            position: relative;
+
+            > a {
+                display: block;
+                margin-right: 40px;
+                font-size: 1.5em;
+
+                > .icon {
+                    position: absolute;
+                    left: 0.5em;
+                }
+            }
+
+            > .open {
+                position: absolute;
+                right: 1em;
+                top: 0.5em;
+                cursor: pointer;
+            }
+
+            > ul {
+                height: 0;
+                overflow: hidden;
+            }
+        }
+    }
+}

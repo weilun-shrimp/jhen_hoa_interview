@@ -20,3 +20,7 @@ Route::get('/', function () {
 });
 
 Route::get('/test', [PostController::class, 'test']);
+
+Route::get('/spa/{any?}', function() {
+    return view('spa');
+});
