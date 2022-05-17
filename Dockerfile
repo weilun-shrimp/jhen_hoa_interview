@@ -1,5 +1,5 @@
 FROM php:8.1-apache
-MAINTAINER Weilun
+# MAINTAINER Weilun
 
 COPY ./conf/000-default.conf /etc/apache2/sites-available/000-default.conf
 
