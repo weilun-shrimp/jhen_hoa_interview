@@ -19,6 +19,10 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/tt', function () {
+    dd(\Auth::tokenById(1));
+});
+
 Route::get('/test', [PostController::class, 'test']);
 
 Route::get('/spa/{any?}', function() {

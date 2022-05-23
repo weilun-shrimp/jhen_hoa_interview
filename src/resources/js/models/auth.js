@@ -10,3 +10,15 @@ export function login(email, pwd) {
         password: pwd
     })
 }
+
+export function me() {
+    return self.post('/auth/me')
+}
+
+export async function asyncMe() {
+    return await self.post('/auth/me')
+}
+
+export function logout() {
+    return self.post('/auth/logout')
+}

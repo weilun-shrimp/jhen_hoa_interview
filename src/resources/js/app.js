@@ -17,7 +17,7 @@ const App = createApp(AppLayout)
 import router from './router.js'
 App.use(router)
 
-import store from './store.js'
+import store from './store/index.js'
 App.use(store)
 
 
