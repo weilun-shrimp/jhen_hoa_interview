@@ -10,4 +10,9 @@ class PostController extends Controller
     {
         echo 000;
     }
+
+    public function index(Request $request)
+    {
+        return 123;
+    }
 }

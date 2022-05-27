@@ -28,7 +28,7 @@
 </template>
 
 <script>
-    import {login} from '../models/auth.js'
+    import {login} from '../models/self/auth.js'
 
     import {ref} from 'vue'
     export default {
@@ -41,16 +41,20 @@
 
         methods: {
             test() {
-                console.log(this.$store)
-                console.log(this.$store.state.auth)
-                console.log(this.$store.state.auth.loadding)
+                console.log(this.$router)
+                console.log(this.$route)
+                // console.log(this.$store)
+                // console.log(this.$store.state.auth)
+                // console.log(this.$store.state.auth.loadding)
             },
 
             submit() {
                 this.$store.commit('auth/loginOrInit')
                 login(this.email, this.pwd).then(res => {
                     console.log('res', res)
+                    console.log(this.$route)
                     this.$store.commit('auth/loginSuc', res.data)
+                    this.$router.push( this.$route.query.redirect_to && this.$route.query.redirect_to !== this.$route.path ? {fullPath: this.$route.query.redirect_to} : {name: 'post.index'})
                 }).catch(error => {
                     console.log('error', error)
                 })

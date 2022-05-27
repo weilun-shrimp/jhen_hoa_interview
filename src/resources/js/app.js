@@ -20,6 +20,9 @@ App.use(router)
 import store from './store/index.js'
 App.use(store)
 
+// import self_axios from './models/configs/self'
+// App.config.globalProperties.$axios = self_axios
+
 
 
 

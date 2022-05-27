@@ -31,10 +31,14 @@ class Authenticate // extends Middleware
      */
     public function handle(Request $request, Closure $next)
     {
-        if (!\Auth::check()) response()->json(['type' => 'unauthorized'], 401);
         if (!isset($_SERVER['HTTP_AUTHORIZATION'])) return response()->json(['type' => 'notProvide'], 401); // token not provide
         $decode_payload = json_decode(base64_decode(explode('.', explode(' ', $_SERVER['HTTP_AUTHORIZATION'])[1])[1]));
-        if (time() - $decode_payload->exp >= 0) return response()->json(['type' => 'expired'], 401); // token has expired
+        if (time() - $decode_payload->exp >= 0) return response()->json([
+            'type' => 'expired',
+            'time' => time(),
+            'exp' => $decode_payload->exp
+        ], 401); // token has expired
+        if (!\Auth::check()) response()->json(['type' => 'unauthorized'], 401);
 
         return $next($request);
     }
