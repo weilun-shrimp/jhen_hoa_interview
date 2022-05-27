@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-use App\Models\Cat;
+use App\Models\PostCat;
 
 class CreatePostsTable extends Migration
 {
@@ -22,10 +22,9 @@ class CreatePostsTable extends Migration
             $table->string('title', 255);
             $table->string('description', 512)->nullable();
             $table->longText('content')->nullable();
-            $table->json('tags')->default('[]');
             $table->timestamps();
 
-            $table->foreign('cat_id')->references('id')->on((new Cat)->getTable());
+            $table->foreign('cat_id')->references('id')->on((new PostCat)->getTable());
         });
     }
 
