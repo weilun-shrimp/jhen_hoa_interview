@@ -21,8 +21,14 @@ class AuthController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function login()
+    public function login(Request $request)
     {
+        $validator = \Validator::make($request->all(), [
+            'email' => 'required|email:dns',
+            'password' => 'required|string',
+        ]);
+        if ($validator->fails()) return response()->json(['errors' => $validator->errors()], 422);
+
         $credentials = request(['email', 'password']);
         if (! $token = auth()->attempt($credentials))
             return response()->json(['type' => 'unauthorized'], 401);

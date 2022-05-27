@@ -20,6 +20,5 @@ export async function asyncMe() {
 }
 
 export function logout() {
-    console.log('logout', localStorage.getItem('token'))
     return self.post('/auth/logout')
 }

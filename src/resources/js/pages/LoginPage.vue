@@ -12,12 +12,21 @@
                     <div class="mb-3">
                         <label for="loginEmail" class="form-label">Email address</label>
                         <input type="email" class="form-control" id="loginEmail" aria-describedby="loginEmailHelp"
-                            v-model="email" required>
+                        v-model="email.value" @change="email.errors = []" required
+                        :class="{'is-invalid': (email.errors.length > 0)}">
+                        <div class="invalid-feedback">
+                            <span v-for="v of email.errors">{{ v }}</span>
+                        </div>
                         <div id="loginEmailHelp" class="form-text">We'll never share your email with anyone else.</div>
                     </div>
                     <div class="mb-3">
                         <label for="loginPassword" class="form-label">Password</label>
-                        <input type="password" class="form-control" id="loginPassword" v-model="pwd" required>
+                        <input type="password" class="form-control" id="loginPassword"
+                        v-model="password.value" @change="password.errors = []" required
+                        :class="{'is-invalid': (password.errors.length > 0)}">
+                        <div class="invalid-feedback">
+                            <span v-for="v of password.errors">{{ v }}</span>
+                        </div>
                     </div>
                     <button type="submit" class="btn btn-primary">Submit</button>
                     <span class="btn btn-primary" @click="test">123</span>
@@ -30,13 +39,19 @@
 <script>
     import {login} from '../models/self/auth.js'
 
-    import {ref} from 'vue'
+    import {ref, reactive} from 'vue'
     export default {
         setup() {
-            const email = ref('')
-            const pwd = ref('')
+            const email = reactive({
+                value: '',
+                errors: []
+            })
+            const password = reactive({
+                value: '',
+                errors: []
+            })
 
-            return{email, pwd}
+            return{email, password}
         },
 
         methods: {
@@ -50,13 +65,17 @@
 
             submit() {
                 this.$store.commit('auth/loginOrInit')
-                login(this.email, this.pwd).then(res => {
-                    console.log('res', res)
-                    console.log(this.$route)
+                login(this.email.value, this.password.value).then(res => {
                     this.$store.commit('auth/loginSuc', res.data)
                     this.$router.push( this.$route.query.redirect_to && this.$route.query.redirect_to !== this.$route.path ? {fullPath: this.$route.query.redirect_to} : {name: 'post.index'})
                 }).catch(error => {
+                    this.$store.commit('auth/loginFailOrLogOutOrInitFail')
                     console.log('error', error)
+                    switch (error.status) {
+                        case 422:
+                            ['email', 'password'].forEach(v => this[v].errors = error.data.errors[v] ?? [])
+                            break
+                    }
                 })
             }
         }
