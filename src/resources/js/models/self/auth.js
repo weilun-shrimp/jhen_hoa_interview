@@ -22,3 +22,8 @@ export async function asyncMe() {
 export function logout() {
     return self.post('/auth/logout')
 }
+
+export function refresh() {
+    console.log('refresh start')
+    return self.post('/auth/refresh')
+}

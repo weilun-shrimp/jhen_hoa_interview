@@ -8,9 +8,7 @@ const state = () => ({
     user: null,
     token: {
         value: null,
-        expiredAt: 0, // timestamp
-        type: 'Bearer',
-        refreshTimeOutId: null
+        type: 'Bearer'
     }
 })
 
@@ -23,26 +21,27 @@ const mutations = {
         state.status = false
         state.user = null
         state.loadding = true
+        if (localStorage.getItem('refreshTimeOutId')) {
+            clearTimeout(localStorage.getItem('refreshTimeOutId'))
+            localStorage.removeItem('refreshTimeOutId')
+        }
         state.token = {
             value: null,
-            expiredAt: 0, // timestamp
-            type: 'Bearer',
-            refreshTimeOutId: null
+            type: 'Bearer'
         }
     },
 
-    loginSuc(state, data) {
+    loginSucOrRefreshSuc(state, data) {
         state.status = true
         state.user = data.user
         localStorage.setItem('token', data.token)
         localStorage.setItem('tokenType', data.tokenType)
         state.token = {
             value: data.token,
-            expiredAt: authHelper.getDecodePayload().exp, // timestamp
-            type: data.tokenType,
-            refreshTimeOutId: null
+            type: data.tokenType
         }
         state.loadding = false
+        authHelper.setRefreshTimeOut()
     },
 
     initSuc(state, user) {
@@ -50,14 +49,17 @@ const mutations = {
         state.user = user
         state.token = {
             value: localStorage.getItem('token'),
-            expiredAt: authHelper.getDecodePayload().exp, // timestamp
-            type: localStorage.getItem('tokenType'),
-            refreshTimeOutId: null
+            type: localStorage.getItem('tokenType')
         }
         state.loadding = false
+        authHelper.setRefreshTimeOut()
     },
 
     loginFailOrLogOutOrInitFail(state) {
+        if (localStorage.getItem('refreshTimeOutId')) {
+            clearTimeout(localStorage.getItem('refreshTimeOutId'))
+            localStorage.removeItem('refreshTimeOutId')
+        }
         if (state.token.value || localStorage.getItem('token')) logout().then(() => {
             localStorage.removeItem('token')
             localStorage.removeItem('tokenType')
@@ -70,9 +72,7 @@ const mutations = {
         state.loadding = false
         state.token = {
             value: null,
-            expiredAt: 0, // timestamp
-            type: 'Bearer',
-            refreshTimeOutId: null
+            type: 'Bearer'
         }
     }
 }
