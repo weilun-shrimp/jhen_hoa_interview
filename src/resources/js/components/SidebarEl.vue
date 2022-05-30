@@ -10,7 +10,7 @@
 
                 <ul v-if="i.subs" :data-key="k" :style="{height: `${i.open_sub ? i.sub_scroll_height : 0}px`}">
                     <router-link v-for="s in i.subs" :to="s.to" :class="{match: s.to.name == $route.name}">
-                        <li>{{ i.title }}</li>
+                        <li>{{ s.title }}</li>
                     </router-link>
                 </ul>
             </li>
@@ -33,6 +33,9 @@
                         {
                             to: {name: 'post.create'},
                             title: 'Create',
+                        },{
+                            to: {name: 'post_cat.index'},
+                            title: 'Cat',
                         }
                     ]
                 },{

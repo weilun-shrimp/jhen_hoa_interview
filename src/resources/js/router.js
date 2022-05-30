@@ -4,6 +4,8 @@ import LoginPage from './pages/LoginPage.vue'
 import PostIndex from './pages/post/IndexPage.vue'
 import PostCreate from './pages/post/CreatePage.vue'
 
+import PostCatIndex from './pages/post_cat/IndexPage.vue'
+
 import CampaignIndex from './pages/campaign/IndexPage.vue'
 import CampaignCreate from './pages/campaign/CreatePage.vue'
 
@@ -12,6 +14,8 @@ const routes = [
 
     { path: '/post', component: PostIndex, name: 'post.index', meta: {requiresAuth: true} },
     { path: '/post/create', component: PostCreate, name: 'post.create', meta: {requiresAuth: true} },
+
+    { path: '/post_cat', component: PostCatIndex, name: 'post_cat.index', meta: {requiresAuth: true} },
 
     { path: '/campaign', component: CampaignIndex, name: 'campaign.index' },
     { path: '/campaign/create', component: CampaignCreate, name: 'campaign.create' },

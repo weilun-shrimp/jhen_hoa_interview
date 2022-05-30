@@ -67,7 +67,7 @@
                 this.$store.commit('auth/loginOrInit')
                 login(this.email.value, this.password.value).then(async res => {
                     await this.$store.commit('auth/loginSucOrRefreshSuc', res.data)
-                    this.$router.push( this.$route.query.redirect_to && this.$route.query.redirect_to !== this.$route.path ? {fullPath: this.$route.query.redirect_to} : {name: 'post.index'})
+                    this.$router.push( this.$route.query.redirect_to && this.$route.query.redirect_to !== this.$route.path ? this.$route.query.redirect_to : {name: 'post.index'})
                 }).catch(error => {
                     this.$store.commit('auth/loginFailOrLogOutOrInitFail')
                     console.log('error', error)
