@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\PostCatController;
 
 /*
 |--------------------------------------------------------------------------
@@ -34,5 +35,9 @@ Route::group(['middleware' => 'api', 'prefix' => 'auth'], function ($router) {
 Route::group(['middleware' => 'auth:api'], function () {
     Route::name('post')->prefix('post')->group(function () {
         Route::get('/', [PostController::class, 'index'])->name('index');
+    });
+
+    Route::name('post_cat')->prefix('post_cat')->group(function () {
+        Route::get('/', [PostCatController::class, 'index'])->name('index');
     });
 });

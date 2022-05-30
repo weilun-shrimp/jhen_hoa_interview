@@ -65,7 +65,6 @@
 
             const switch_subs = key => {
                 index[key].open_sub = !index[key].open_sub
-                console.log(index)
             }
 
             return {index, switch_subs}
