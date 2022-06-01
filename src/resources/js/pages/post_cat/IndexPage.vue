@@ -3,7 +3,7 @@
 
         <div class="row">
             <div class="col">
-                <button class="btn btn-primary" @click="test">Create</button>
+                <button class="btn btn-primary" @click="toggle_create_modal">Create</button>
             </div>
             <create-edit ref="create_modal"
                 :id="0"
@@ -50,16 +50,14 @@
     import CreateEdit from '../../components/post_cat/CreateEdit.vue'
 
     import {index as fetch} from '../../models/self/post_cat'
-
-    import {reactive} from 'vue'
     export default {
-        setup() {
-            const show_create_modal = false
-            const index = reactive([
 
-            ])
-
-            return {show_create_modal, index}
+        data() {
+            return {
+                index: [],
+                has_next_page: false,
+                has_prev_page: false
+            }
         },
 
         components: {
@@ -68,22 +66,21 @@
         },
 
         created() {
-            fetch(this.$route.query).then(res => this.index = res.data)
+            fetch(this.$route.query).then(res => {
+                this.index = res.data.data
+                this.has_next_page = !!res.data.next_page_url
+                this.has_prev_page = !!res.data.prev_page_url
+            })
         },
 
         methods: {
-            test() {
-                // console.log(this.$refs.create_modal.$el)
+            toggle_create_modal() {
                 $(this.$refs.create_modal.$el).modal('toggle')
+            },
+
+            test() {
+                console.log(this.index)
             }
-        },
-
-
-        mounted() {
-            // console.log(this.$route)
-            console.log(this.$refs)
-            console.log(this.$refs.create_modal)
-            console.log(this.$ref)
         }
     }
 </script>

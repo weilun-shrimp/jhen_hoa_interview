@@ -5,3 +5,11 @@ export function index(filter = {}) {
         params : filter
     })
 }
+
+export function store(data = {title: '', description: ''}) {
+    return self.post('/post_cat', data)
+}
+
+export function update(id, data = {title: '', description: ''}) {
+    return self.put(`/post_cat/${id}`, data)
+}
