@@ -43,6 +43,7 @@
 <script>
     import {store, update} from '../../models/self/post_cat'
     export default {
+        emits: ['fetchIndex', 'updateCat'],
         props: ['id', 'title', 'description'],
         data() {
             return {
@@ -66,12 +67,15 @@
                     title: this.title,
                     description: this.description
                 }
-                console.log(data)
                 const req = !this.id ? store(data) : update(this.id, data)
                 req.then(res => {
                     console.log(res)
-                    alert(`Post Cat #${res.data.id} has been ${this.id ? 'updated' : 'Created'}`)
-                    this.$router.push({name: 'post_cat.index'})
+                    alert(`Post Cat #${res.data.id} has been ${this.id ? 'updated' : 'created'}`)
+                    if (!this.id) { // created
+                        if (!Object.keys(this.$route.query).length) this.$emit('fetchIndex')
+                        this.$router.push({name: 'post_cat.index'})
+                    } else this.$emit('updateCat', res.data) // update
+                    $(this.$el).modal('hide')
                     return
                 }).catch(error => {
                     switch(error.status) {
@@ -90,3 +94,10 @@
         }
     }
 </script>
+
+<style scoped>
+.spinner-border {
+    width: 1rem;
+    height: 1rem;
+}
+</style>

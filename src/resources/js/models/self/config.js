@@ -37,7 +37,7 @@ self.interceptors.response.use(res => {
                 case 'unauthorized': alert('You are unauthorized. Please login.'); break
             }
             store.commit('auth/loginFailOrLogOutOrInitFail')
-            router.push({name: 'login', query: {redirect_to: router.currentRoute.value.fullPath}})
+            if (router.currentRoute.value.name !== 'login') router.push({name: 'login', query: {redirect_to: router.currentRoute.value.fullPath}})
             break
         case 403:
             alert('You have no permission to access this resource.')

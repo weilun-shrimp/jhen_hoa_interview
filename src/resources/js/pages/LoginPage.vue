@@ -56,8 +56,11 @@
 
         methods: {
             test() {
-                console.log(this.$router)
                 console.log(this.$route)
+                console.log(this.$router)
+                console.log(this.$router.currentRoute)
+                console.log(this.$router.currentRoute._value)
+                console.log(this.$router.currentRoute.value)
                 // console.log(this.$store)
                 // console.log(this.$store.state.auth)
                 // console.log(this.$store.state.auth.loadding)

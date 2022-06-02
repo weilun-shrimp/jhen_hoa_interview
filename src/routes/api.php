@@ -40,5 +40,6 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::name('post_cat')->prefix('post_cat')->group(function () {
         Route::get('/', [PostCatController::class, 'index'])->name('index');
         Route::post('/', [PostCatController::class, 'store'])->name('store');
+        Route::put('/{cat_id}', [PostCatController::class, 'update'])->name('update');
     });
 });
