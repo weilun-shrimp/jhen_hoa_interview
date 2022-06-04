@@ -36,19 +36,19 @@
                                 </div>
                             </td>
                         </tr>
-                        <tr v-else v-for="(v, k) in index">
-                            <th scope="row">{{ v.id }}</th>
-                            <td>{{ v.title }}</td>
-                            <td>{{ v.description.substr(0, 15) }} {{ v.description.length > 15 ? '...' : '' }}</td>
-                            <td>{{ (new Date(v.created_at)).toDateString() }}</td>
+                        <tr v-else v-for="k in Object.keys(index).reverse()">
+                            <th scope="row">{{ k }}</th>
+                            <td>{{ index[k].title }}</td>
+                            <td>{{ index[k].description.substr(0, 15) }} {{ index[k].description.length > 15 ? '...' : '' }}</td>
+                            <td>{{ (new Date(index[k].created_at)).toDateString() }}</td>
                             <td>
                                 <button class="btn btn-outline-primary" @click="toggleModal(k)">Edit</button>
                                 <create-edit :ref="`modal${k}`" @update-cat="updateCat" @fetch-index="fetchIndex"
-                                    :id="v.id"
-                                    :title="v.title"
-                                    :description="v.description"
+                                    :id="index[k].id"
+                                    :title="index[k].title"
+                                    :description="index[k].description"
                                 />
-                                <button class="btn btn-outline-danger" @click="destroyCat($event, k)">
+                                <button class="btn btn-outline-danger mx-1" @click="destroyCat($event, k)">
                                     Delete
                                     <div class="spinner-border delete_spinner" role="status">
                                         <span class="visually-hidden">Loading...</span>
@@ -102,7 +102,7 @@
                 this.loadding = true
                 fetch(this.$route.query).then(res => {
                     const pre = {}
-                    res.data.data.forEach(v => pre[v.id] = v)
+                    res.data.data.reverse().forEach(v => pre[v.id] = v)
                     this.index = pre
                     this.has_next_page = !!res.data.next_page_url
                     this.has_prev_page = !!res.data.prev_page_url
@@ -146,7 +146,8 @@
             },
 
             test() {
-                console.log(this.loadding)
+                console.log()
+                console.log(this.index)
             }
         }
     }
