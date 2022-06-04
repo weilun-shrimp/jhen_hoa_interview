@@ -19,6 +19,14 @@
             }
         },
 
+        created() {
+            this.$watch(
+                () => this.$route.query.title,
+                (newTitle) => this.title = newTitle ?? '',
+                {immediate: true}
+            )
+        },
+
         methods: {
             submit() {
                 this.$router.push({name: this.$route.name, query: {title: this.title}})

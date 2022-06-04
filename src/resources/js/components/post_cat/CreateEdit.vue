@@ -8,7 +8,6 @@
                 </div>
                 <form action="" @submit.prevent="submit">
                     <div class="modal-body">
-                        <p>Modal body text goes here.</p>
                         <div class="mb-3">
                             <label :for="`post_cat_modal_${id}_title`" class="form-label">Title</label>
                             <input type="text" class="form-control" :class="{'is-invalid': errors.title.length}" maxlength="255" :id="`post_cat_modal_${id}_title`" v-model="title" required>
@@ -70,11 +69,11 @@
                 const req = !this.id ? store(data) : update(this.id, data)
                 req.then(res => {
                     console.log(res)
-                    alert(`Post Cat #${res.data.id} has been ${this.id ? 'updated' : 'created'}`)
                     if (!this.id) { // created
                         if (!Object.keys(this.$route.query).length) this.$emit('fetchIndex')
                         this.$router.push({name: 'post_cat.index'})
                     } else this.$emit('updateCat', res.data) // update
+                    alert(`Post Cat #${res.data.id} has been ${this.id ? 'updated' : 'created'}`)
                     $(this.$el).modal('hide')
                     return
                 }).catch(error => {

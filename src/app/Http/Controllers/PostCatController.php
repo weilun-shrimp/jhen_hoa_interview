@@ -5,13 +5,15 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Models\PostCat;
+use App\Models\Post;
 
 class PostCatController extends Controller
 {
     public function index(Request $request)
     {
-        $index = PostCat::orderby('id', 'DESC');
-        if ($request->title) $index->where('title', 'like', "%$request->title%");
+        $index = PostCat::leftjoin((new Post)->getTable() . ' as p', 'p.cat_id', '=', 'post_cats.id')
+            ->selectRaw('post_cats.*, COUNT(p.id) count_p')->groupby('post_cats.id')->orderby('post_cats.id', 'DESC');
+        if ($request->title) $index->where('post_cats.title', 'like', "%$request->title%");
         return $index->simplePaginate(24);
     }
 

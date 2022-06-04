@@ -11290,7 +11290,7 @@ header#header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  position: absolute;
+  position: fixed;
   top: 0;
   min-height: 60px;
   width: 100vw;
@@ -11298,7 +11298,7 @@ header#header {
 }
 
 nav#sidebar {
-  position: absolute;
+  position: fixed;
   left: 0;
   top: 60px;
   width: 220px;

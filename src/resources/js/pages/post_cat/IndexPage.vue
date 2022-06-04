@@ -29,14 +29,21 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="(v, k) in index">
+                        <tr v-if="loadding">
+                            <td colspan="5">
+                                <div class="spinner-border d-block mx-auto" role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr v-else v-for="(v, k) in index">
                             <th scope="row">{{ v.id }}</th>
                             <td>{{ v.title }}</td>
                             <td>{{ v.description.substr(0, 15) }} {{ v.description.length > 15 ? '...' : '' }}</td>
                             <td>{{ (new Date(v.created_at)).toDateString() }}</td>
                             <td>
-                                <button class="btn btn-outline-primary" @click="toggleModal(k + 1)">Edit</button>
-                                <create-edit ref="modals" @update-cat="updateCat" @fetch-index="fetchIndex"
+                                <button class="btn btn-outline-primary" @click="toggleModal(k)">Edit</button>
+                                <create-edit :ref="`modal${k}`" @update-cat="updateCat" @fetch-index="fetchIndex"
                                     :id="v.id"
                                     :title="v.title"
                                     :description="v.description"
@@ -59,9 +66,11 @@
 
         data() {
             return {
-                index: [],
+                index: {},
                 has_next_page: false,
-                has_prev_page: false
+                has_prev_page: false,
+
+                loadding: false
             }
         },
 
@@ -84,28 +93,28 @@
 
         methods: {
             fetchIndex() {
+                this.loadding = true
                 fetch(this.$route.query).then(res => {
-                    this.index = res.data.data
+                    const pre = {}
+                    res.data.data.forEach(v => pre[v.id] = v)
+                    this.index = pre
                     this.has_next_page = !!res.data.next_page_url
                     this.has_prev_page = !!res.data.prev_page_url
-                })
+                }).catch(() => {return}).then(() => this.loadding = false)
             },
 
             toggleModal(key) {
                 let target = this.$refs
-                target = !key ? target.create_modal : target.modals[key - 1]
+                target = !key ? target.create_modal : target[`modal${key}`][0]
                 $(target.$el).modal('toggle')
             },
 
             updateCat(data) {
-                for (const k in this.index) if (this.index[k].id == data.id){
-                    this.index[k] = data
-                    break
-                }
+                for (const k in data) this.index[data.id][k] = data[k]
             },
 
             test() {
-                console.log(this.$refs)
+                console.log(this.loadding)
             }
         }
     }
