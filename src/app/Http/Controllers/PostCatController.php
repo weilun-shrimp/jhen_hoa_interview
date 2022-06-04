@@ -25,7 +25,7 @@ class PostCatController extends Controller
         return $cat ? $cat->toJson() : response()->json('Create failed.', 500);
     }
 
-    public function update(Request $request, $cat_id)
+    public function update(Request $request, int $cat_id)
     {
         $validator = $this->store_update_validator($request);
         if ($validator->fails()) return response()->json($validator->errors(), 400);
@@ -45,5 +45,19 @@ class PostCatController extends Controller
             'title' => 'required|max:255',
             'description' => 'nullable|string|max:512',
         ]);
+    }
+
+    public function delete(int $cat_id)
+    {
+        $cat = null;
+        \DB::transaction(function () use ($cat_id, &$cat) {
+            $cat = PostCat::where('post_cats.id', $cat_id)
+                ->leftjoin((new Post)->getTable() . ' as p', 'p.cat_id', '=', 'post_cats.id')
+                ->selectRaw('post_cats.*, COUNT(p.id) count_p')->groupby('post_cats.id')->lockForUpdate()->first();
+            if (!$cat or $cat->count_p > 0) return;
+            $cat->delete();
+        });
+        if (!$cat) return response(null, 404);
+        return $cat->count_p > 0 ? response()->json(['type' => 'PostAssigned'], 400) : $cat;
     }
 }

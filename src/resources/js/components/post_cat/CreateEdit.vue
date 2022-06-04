@@ -27,7 +27,7 @@
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                         <button type="submit" class="btn btn-primary">
-                            Save changes
+                            {{ !id ? `Create` : `Save changes` }}
                             <div class="spinner-border" role="status" v-if="loadding">
                                 <span class="visually-hidden">Loading...</span>
                             </div>
@@ -84,7 +84,6 @@
                     }
                     return
                 }).then(() => this.loadding = false)
-
             }
         },
 

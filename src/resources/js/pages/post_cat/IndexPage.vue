@@ -48,6 +48,12 @@
                                     :title="v.title"
                                     :description="v.description"
                                 />
+                                <button class="btn btn-outline-danger" @click="destroyCat($event, k)">
+                                    Delete
+                                    <div class="spinner-border delete_spinner" role="status">
+                                        <span class="visually-hidden">Loading...</span>
+                                    </div>
+                                </button>
                             </td>
                         </tr>
                     </tbody>
@@ -61,7 +67,7 @@
     import FilterForm from '../../components/post_cat/FilterForm.vue'
     import CreateEdit from '../../components/post_cat/CreateEdit.vue'
 
-    import {index as fetch} from '../../models/self/post_cat'
+    import {index as fetch, destroy} from '../../models/self/post_cat'
     export default {
 
         data() {
@@ -113,6 +119,32 @@
                 for (const k in data) this.index[data.id][k] = data[k]
             },
 
+            destroyCat(event, id) {
+                console.log(event.target.querySelector('.delete_spinner'))
+                if (!this.index[id] || this.index[id].count_p > 0) return
+                event.target.querySelector('.delete_spinner').classList.add('show')
+                destroy(id).then(() => {
+                    alert(`Post cat#${id} has been deleted.`)
+                    delete this.index[id]
+                    return
+                }).catch(error => {
+                    switch (error.status) {
+                        case 400:
+                            switch (error.data.type) {
+                                case 'PostAssigned':
+                                    alert(`The post cat#${id} has been assigned to some posts. Action delete fail.`)
+                                    break
+                            }
+                            break
+                        case 404:
+                            alert(`System can't find designate resource post cat#${id}. Maybe this resource has been deleted.`)
+                            delete this.index[id]
+                            break
+                    }
+                    return
+                }).then(() => event.target.querySelector('.delete_spinner').classList.remove('show'))
+            },
+
             test() {
                 console.log(this.loadding)
             }
@@ -123,5 +155,15 @@
 <style scoped>
 th, td {
     vertical-align: middle;
+}
+
+.delete_spinner {
+    width: 1rem;
+    height: 1rem;
+    display: none;
+}
+
+.delete_spinner.show {
+    display: inline-block;
 }
 </style>

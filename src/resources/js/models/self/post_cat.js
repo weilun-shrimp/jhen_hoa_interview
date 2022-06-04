@@ -13,3 +13,7 @@ export function store(data = {title: '', description: ''}) {
 export function update(id, data = {title: '', description: ''}) {
     return self.put(`/post_cat/${id}`, data)
 }
+
+export function destroy(id) {
+    return self.delete(`/post_cat/${id}`)
+}

@@ -41,5 +41,6 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::get('/', [PostCatController::class, 'index'])->name('index');
         Route::post('/', [PostCatController::class, 'store'])->name('store');
         Route::put('/{cat_id}', [PostCatController::class, 'update'])->name('update');
+        Route::delete('/{cat_id}', [PostCatController::class, 'delete'])->name('delete');
     });
 });
