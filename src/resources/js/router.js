@@ -32,9 +32,8 @@ import * as authHelper from './helpers/auth'
 import {asyncMe} from './models/self/auth.js'
 router.beforeEach(async (to, from) => {
     // ...
-
-    console.log('to', to)
     console.log('from', from)
+    console.log('to', to)
     let auth = true
     if (to.meta.requiresAuth && !store.state.auth.status) {
         auth = false
