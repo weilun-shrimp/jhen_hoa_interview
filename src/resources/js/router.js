@@ -2,7 +2,7 @@
 import LoginPage from './pages/LoginPage.vue'
 
 import PostIndex from './pages/post/IndexPage.vue'
-import PostCreate from './pages/post/CreatePage.vue'
+import FromPage from './pages/post/FromPage.vue'
 
 import PostCatIndex from './pages/post_cat/IndexPage.vue'
 
@@ -13,7 +13,8 @@ const routes = [
     { path: '/login', component: LoginPage, name: 'login' },
 
     { path: '/post', component: PostIndex, name: 'post.index', meta: {requiresAuth: true} },
-    { path: '/post/create', component: PostCreate, name: 'post.create', meta: {requiresAuth: true} },
+    { path: '/post/create', component: FromPage, name: 'post.create', meta: {requiresAuth: true} },
+    { path: '/post/:id/edit', component: FromPage, name: 'post.edit', meta: {requiresAuth: true} },
 
     { path: '/post_cat', component: PostCatIndex, name: 'post_cat.index', meta: {requiresAuth: true} },
 

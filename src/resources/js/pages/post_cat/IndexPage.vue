@@ -5,7 +5,7 @@
             <div class="col">
                 <button class="btn btn-primary" @click="toggleModal(0)">Create</button>
             </div>
-            <create-edit ref="create_modal" @update-cat="updateCat" @fetch-index="fetchIndex"
+            <form-modal ref="create_modal" @update-cat="updateCat" @fetch-index="fetchIndex"
                 :id="0"
                 :title="''"
                 :description="''"
@@ -43,7 +43,7 @@
                             <td>{{ (new Date(index[k].created_at)).toDateString() }}</td>
                             <td>
                                 <button class="btn btn-outline-primary" @click="toggleModal(k)">Edit</button>
-                                <create-edit :ref="`modal${k}`" @update-cat="updateCat" @fetch-index="fetchIndex"
+                                <form-modal :ref="`modal${k}`" @update-cat="updateCat" @fetch-index="fetchIndex"
                                     :id="index[k].id"
                                     :title="index[k].title"
                                     :description="index[k].description"
@@ -65,7 +65,7 @@
 
 <script>
     import FilterForm from '../../components/post_cat/FilterForm.vue'
-    import CreateEdit from '../../components/post_cat/CreateEdit.vue'
+    import FormModal from '../../components/post_cat/FormModal.vue'
 
     import {index as fetch, destroy} from '../../models/self/post_cat'
     export default {
@@ -82,7 +82,7 @@
 
         components: {
             FilterForm,
-            CreateEdit
+            FormModal
         },
 
         created() {

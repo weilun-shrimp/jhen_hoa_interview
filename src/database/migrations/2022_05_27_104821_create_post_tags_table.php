@@ -21,7 +21,7 @@ class CreatePostTagsTable extends Migration
             $table->string('value', 255);
             $table->timestamps();
 
-            $table->unique('post_id', 'value');
+            $table->unique(['post_id', 'value']);
 
             $table->foreign('post_id')->references('id')->on((new Post)->getTable());
         });

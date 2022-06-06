@@ -12,6 +12,9 @@ RUN a2ensite 000-default.conf
 RUN docker-php-source extract
 RUN docker-php-ext-install mysqli pdo pdo_mysql
 
+# VOLUME "C://xampp/htdocs/laravel_interview/src:/var/www/html"
+# RUN chmod 777 -R /var/www/html/storage/public
+
 # RUN apt-get update
 # RUN apt-get install -y git
 

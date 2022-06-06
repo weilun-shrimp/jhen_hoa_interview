@@ -3,7 +3,7 @@
 
         <div class="row mb-2">
             <div class="col">
-                <button class="btn btn-primary">Create</button>
+                <router-link :to="{name: 'post.create'}" class="btn btn-primary">Create</router-link>
             </div>
         </div>
 
@@ -32,14 +32,14 @@
                                 </div>
                             </td>
                         </tr>
-                        <tr v-else v-for="v in index">
-                            <th scope="row">{{ k }}</th>
-                            <td><img :src="$store.app_url + v.img"></td>
+                        <tr v-for="v in computedIndex">
+                            <th scope="row">{{ v.id }}</th>
+                            <td><img v-if="v.img" :src="generate_img_src(v.img)"></td>
                             <td>{{ v.title }}</td>
                             <td>{{ v.description.substr(0, 15) }} {{ v.description.length > 15 ? '...' : '' }}</td>
                             <td>{{ (new Date(v.created_at)).toDateString() }}</td>
                             <td>
-                                <button class="btn btn-outline-primary" @click="toggleModal(k)">Edit</button>
+                                <router-link :to="{name: 'post.edit', params: { id: v.id }}" class="btn btn-outline-primary">Edit</router-link>
                             </td>
                         </tr>
                     </tbody>
@@ -50,6 +50,7 @@
 </template>
 
 <script>
+import { computed } from '@vue/runtime-core'
     import FilterForm from '../../components/post_cat/FilterForm.vue'
 
     import {index as fetch} from '../../models/self/post'
@@ -57,7 +58,7 @@
 
         data() {
             return {
-                index: {},
+                index: [],
                 has_next_page: false,
                 has_prev_page: false,
 
@@ -85,15 +86,25 @@
             fetchIndex() {
                 this.loadding = true
                 fetch(this.$route.query).then(res => {
-                    this.index = res.data
+                    this.index = res.data.data
                     this.has_next_page = !!res.data.next_page_url
                     this.has_prev_page = !!res.data.prev_page_url
                 }).catch(() => {return}).then(() => this.loadding = false)
             },
 
+            generate_img_src(path = null) {
+                return !path ? null : window.location.origin + '/storage/' + path
+            },
+
             test() {
                 console.log()
                 console.log(this.index)
+            }
+        },
+
+        computed: {
+            computedIndex() {
+                return this.loadding ? [] : this.index
             }
         }
     }
@@ -102,5 +113,9 @@
 <style scoped>
 th, td {
     vertical-align: middle;
+}
+
+td > img {
+    max-width: 50px;
 }
 </style>
