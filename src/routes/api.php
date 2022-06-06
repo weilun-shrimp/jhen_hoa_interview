@@ -35,9 +35,11 @@ Route::group(['middleware' => 'api', 'prefix' => 'auth'], function ($router) {
 Route::group(['middleware' => 'auth:api'], function () {
     Route::name('post')->prefix('post')->group(function () {
         Route::get('/', [PostController::class, 'index'])->name('index');
+        Route::get('/{id}', [PostController::class, 'show'])->name('show')->where('id', '[0-9]+');;
         Route::post('/', [PostController::class, 'store'])->name('store');
         Route::get('/create', [PostController::class, 'create'])->name('create');
         Route::get('/edit/{post}', [PostController::class, 'edit'])->name('edit');
+        Route::put('/{id}', [PostController::class, 'update'])->name('update');
     });
 
     Route::name('post_cat')->prefix('post_cat')->group(function () {

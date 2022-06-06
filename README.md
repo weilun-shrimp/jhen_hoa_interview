@@ -1,5 +1,5 @@
 # Weilun Interview
-Docker, Laravel, Vue, JWT Auth, Mysql
+Docker, Laravel, JWT Auth, Mysql, Vue, Bootstrap, Scss
 *   [Installation - 安裝](#installation---安裝)
     *   [Docker](#docker)
     *   [Straight](#straight)

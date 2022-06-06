@@ -20,10 +20,9 @@ Route::get('/', function () {
 });
 
 Route::get('/tt', function () {
+    dd(date('Y-m-d H:i:s'));
     dd(\Auth::tokenById(1));
 });
-
-Route::get('/test', [PostController::class, 'test']);
 
 Route::get('/spa/{any?}', function() {
     return view('spa');

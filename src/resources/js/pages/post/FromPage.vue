@@ -83,13 +83,9 @@
                     created_at: null,
                     updated_at: null,
                 },
-
                 cats: [],
-
                 tags: [],
-
                 img_preview_src: null,
-
                 errors: {
                     cat_id: [],
                     img: [],
@@ -98,27 +94,23 @@
                     content: [],
                     tags: []
                 },
-
                 loadding: false
             }
         },
 
         created() {
-            this.loadding = true
-            const retrieve = !this.$route.params.id ? create() : edit(this.$route.params.id)
-            retrieve.then(res => {
-                if (res.data.post) this.post = res.data.post
-                if (res.data.tags) res.data.tags.forEach(v => this.tags.push(v.value))
-                this.cats = res.data.cats
+            this.retrieve()
+        },
 
-                // set default
-                if (!this.$route.params.id && this.cats) this.post.cat_id = this.cats[0].id
-                if (this.post.img) this.img_preview_src = this.$store.app_url + this.post.img
-            }).catch(error => {switch (error.status) {
-                case 404:
-                    alert(`System can't find designate post#${this.$route.params.id}. Maybe this resource has been deleted.`)
-                    break
-            }}).then(() => this.loadding = false)
+        beforeRouteEnter (to, from, next) {
+            next(vm => {
+                if (from.name == 'post.edit' && to.name == 'post.create') vm.flush_data()
+                if (from.name == 'post.create' && to.name == 'post.edit') vm.retrieve()
+            })
+        },
+
+        beforeRouteUpdate (to) {
+            this.retrieve(to.params.id)
         },
 
         methods: {
@@ -128,6 +120,26 @@
                     file_reader.onload = () => this.img_preview_src = file_reader.result
                     file_reader.readAsDataURL(event.target.files[0])
                 }
+            },
+
+            retrieve(id = this.$route.params.id) {
+                this.loadding = true
+                this.tags = []
+                const retrieve = !this.$route.params.id ? create() : edit(id)
+                retrieve.then(res => {
+                    if (res.data.post) this.post = res.data.post
+                    if (res.data.tags) res.data.tags.forEach(v => this.tags.push(v.value))
+                    this.cats = res.data.cats
+
+                    // set default
+                    if (!this.$route.params.id && this.cats) this.post.cat_id = this.cats[0].id
+                    if (this.post.img) this.img_preview_src = window.location.origin + '/storage/' + this.post.img
+                }).catch(error => {switch (error.status) {
+                    case 404:
+                        alert(`System can't find designate post#${this.$route.params.id}. Maybe this resource has been deleted.`)
+                        this.$router.push({name: 'post.index'})
+                        break
+                }}).then(() => this.loadding = false)
             },
 
             submit() {
@@ -140,8 +152,6 @@
                     content: this.post.content,
                     tags: this.tags
                 }
-                console.log(data)
-                // return
                 const req = !this.post.id ? store(data) : update(this.post.id, data)
                 req.then(() => {
                     if (!this.post.id) this.$router.push({name: 'post.index'})
@@ -165,14 +175,14 @@
                 event.target.value = null
             },
 
-            test(event) {
-                console.log(event.target.value)
+            flush_data() {
+                this.post.id = 0
+                this.post.cat_id = this.cats.length ? this.cats[0].id : null;
+                ['img', 'title', 'description', 'content', 'created_at', 'updated_at'].forEach(v => this.post[v] = null)
+                this.tags = []
+                this.img_preview_src = null;
+                ['cat_id', 'img', 'title', 'description', 'content', 'tags'].forEach(v => this.errors[v] = [])
             }
-        },
-
-
-        mounted() {
-            console.log(this.$route)
         }
     }
 </script>

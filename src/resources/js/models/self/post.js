@@ -1,3 +1,4 @@
+// import { getGlobalThis } from '@vue/shared';
 import self from './config'
 
 function construct_formdata(data = {
@@ -9,7 +10,7 @@ function construct_formdata(data = {
     tags: []
 }) {
     const formdata = new FormData();
-    ['title', 'img', 'cat_id', 'description', 'content'].forEach(v => {if (data[v]) formdata.append(v, data[v])})
+    ['title', 'img', 'cat_id', 'description', 'content'].forEach(v => data[v] ? formdata.append(v, data[v]) : null)
     data.tags.forEach(v => formdata.append('tags[]', v))
     return formdata
 }
@@ -20,8 +21,12 @@ export function index(filter = {}) {
     })
 }
 
+export function show(id) {
+    return self.get(`/post/${id}`)
+}
+
 export function create() {
-    return self.get(`/post/create`)
+    return self.get('/post/create')
 }
 
 export function edit(id) {
@@ -49,7 +54,9 @@ export function update(id, data = {
     tags: []
 }) {
     self.defaults.headers.common['Content-Type'] = 'multipart/form-data'
-    return self.put(`/post/${id}`, construct_formdata(data))
+    const formdata = construct_formdata(data)
+    formdata.append('_method', 'PUT')
+    return self.post(`/post/${id}`, formdata)
 }
 
 export function destroy(id) {

@@ -19,6 +19,7 @@
                             <th scope="col">#</th>
                             <th scope="col">Img</th>
                             <th scope="col">Title</th>
+                            <th scope="col">Cat</th>
                             <th scope="col">Description</th>
                             <th scope="col">Created At</th>
                             <th scope="col">Action</th>
@@ -35,7 +36,8 @@
                         <tr v-for="v in computedIndex">
                             <th scope="row">{{ v.id }}</th>
                             <td><img v-if="v.img" :src="generate_img_src(v.img)"></td>
-                            <td>{{ v.title }}</td>
+                            <td><router-link :to="{name: 'post.show', params: {id: v.id}}">{{ v.title }}</router-link></td>
+                            <td>{{ v.c_title }}</td>
                             <td>{{ v.description.substr(0, 15) }} {{ v.description.length > 15 ? '...' : '' }}</td>
                             <td>{{ (new Date(v.created_at)).toDateString() }}</td>
                             <td>
@@ -50,7 +52,6 @@
 </template>
 
 <script>
-import { computed } from '@vue/runtime-core'
     import FilterForm from '../../components/post_cat/FilterForm.vue'
 
     import {index as fetch} from '../../models/self/post'
@@ -71,11 +72,9 @@ import { computed } from '@vue/runtime-core'
         },
 
         created() {
-            this.fetchIndex()
-
             this.$watch(
                 () => this.$route.query,
-                () => this.fetchIndex(),
+                () => this.$route.name == 'post.index' ? this.fetchIndex() : (() => {})(),
                 // fetch the data when the view is created and the data is
                 // already being observed
                 { immediate: true }
@@ -94,11 +93,6 @@ import { computed } from '@vue/runtime-core'
 
             generate_img_src(path = null) {
                 return !path ? null : window.location.origin + '/storage/' + path
-            },
-
-            test() {
-                console.log()
-                console.log(this.index)
             }
         },
 

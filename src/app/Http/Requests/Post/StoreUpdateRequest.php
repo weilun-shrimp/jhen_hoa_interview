@@ -46,16 +46,16 @@ class StoreUpdateRequest extends FormRequest
      * @param  \Illuminate\Validation\Validator  $validator
      * @return void
      */
-    public function withValidator($validator)
-    {
-        $validator->after(function ($validator) {
-            if ($this->cat_id) {
-                $cat = PostCat::find($this->cat_id);
-                if (!$cat) $validator->errors()->add("cat_id', 'System can't find designate post cat resource by $this->cat_id.");
-                else $this->cat = $cat;
-            }
-        });
-    }
+    // public function withValidator($validator)
+    // {
+    //     $validator->after(function ($validator) {
+    //         if ($this->cat_id) {
+    //             $cat = PostCat::find($this->cat_id);
+    //             if (!$cat) $validator->errors()->add("cat_id', 'System can't find designate post cat resource by $this->cat_id.");
+    //             else $this->cat = $cat;
+    //         }
+    //     });
+    // }
 
     protected function failedValidation(Validator $validator)
     {
