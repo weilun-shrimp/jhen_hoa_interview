@@ -28,7 +28,7 @@ services:
         restart: always
         ports: 
             - 8080:80
-        volumes:
+        # volumes:
             # - './src:/var/www/html'
         depends_on:
             - mysql8
