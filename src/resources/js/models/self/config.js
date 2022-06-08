@@ -21,10 +21,10 @@ import router from '../../router'
 import store from '../../store/index'
 self.interceptors.response.use(res => {
     // do nothing
-    console.log('interceptors res', res)
+    // console.log('interceptors res', res)
     return res
 }, error => {
-    console.log('interceptors error', error)
+    // console.log('interceptors error', error)
     // throw Promise.resolve(error.response)
     switch(error.response.status) {
         case 500:

@@ -12,29 +12,32 @@ RUN a2ensite 000-default.conf
 RUN docker-php-source extract
 RUN docker-php-ext-install mysqli pdo pdo_mysql
 
-# VOLUME "C://xampp/htdocs/laravel_interview/src:/var/www/html"
-# RUN chmod 777 -R /var/www/html/storage/public
+RUN apt-get update
 
-# RUN apt-get update
-# RUN apt-get install -y git
-
-
-#project
-# WORKDIR /var/www/html
-# COPY ./src /var/www/html
-
-# RUN ls
+#install git
+RUN apt-get install -y git
 
 #install composer
-# COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer 
-# RUN composer install -n
-
-#.env
-# RUN cp .env.example .env
-# RUN php artisan key:generate
+COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer 
 
 #install nodejs
-# RUN curl -sL https://deb.nodesource.com/setup_16.x  | bash -
-# RUN apt-get install -y nodejs
-# RUN npm install
-# RUN npm run dev  #has permission issue
+RUN curl -sL https://deb.nodesource.com/setup_16.x  | bash -
+RUN apt-get install -y nodejs
+
+#project
+WORKDIR /var/www/html
+COPY ./src /var/www/html
+
+
+RUN composer install --ignore-platform-reqs
+
+#.env
+RUN cp .env.example .env
+RUN php artisan key:generate
+RUN php artisan storage:link
+RUN php artisan jwt:secret
+RUN php artisan migrate
+RUN php artisan db:seed
+
+RUN npm install
+# npm run dev must do it in docker exec
