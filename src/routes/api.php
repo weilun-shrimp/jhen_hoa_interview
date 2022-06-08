@@ -40,6 +40,7 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::get('/create', [PostController::class, 'create'])->name('create');
         Route::get('/edit/{post}', [PostController::class, 'edit'])->name('edit');
         Route::put('/{id}', [PostController::class, 'update'])->name('update');
+        Route::delete('/{id}', [PostController::class, 'destroy'])->name('delete');
     });
 
     Route::name('post_cat')->prefix('post_cat')->group(function () {

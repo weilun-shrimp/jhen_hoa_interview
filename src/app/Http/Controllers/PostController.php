@@ -40,11 +40,9 @@ class PostController extends Controller
 
     public function store(StoreUpdateRequest $request)
     {
-        $cat = null;
         $post = null;
         \DB::transaction(function () use ($request, &$cat, &$post) {
-            $cat = PostCat::where('id', $request->cat_id)->sharedLock()->first();
-            if (!$cat) return;
+            $cat = $request->cat_id ? PostCat::where('id', $request->cat_id)->sharedLock()->first() : null;
             $post = Post::create([
                 'title' => $request->title,
                 'description' => $request->description,
@@ -61,19 +59,16 @@ class PostController extends Controller
             foreach ($request->tags ?? [] as $v) $insert[] = ['post_id' => $post->id, 'value' => $v, 'created_at' => $now, 'updated_at' => $now];
             if ($insert) PostTag::insert($insert);
         });
-        if (!$cat) return response()->json(['cat_id' => ["System can't find designate post cat resource by $request->cat_id."]], 422);
         return $post;
     }
 
     public function update(StoreUpdateRequest $request, int $id)
     {
         $post = null;
-        $cat = null;
         \DB::transaction(function () use ($request, $id, &$post, &$cat) {
             $post = Post::where('id', $id)->lockForUpdate()->first();
             if (!$post) return;
-            $cat = PostCat::where('id', $request->cat_id)->sharedLock()->first();
-            if (!$cat) return;
+            $cat = $request->cat_id ? PostCat::where('id', $request->cat_id)->sharedLock()->first() : null;
             foreach (['title', 'description', 'content', 'cat_id'] as $v) $post->{$v} = $request->{$v};
             if ($request->img) {
                 if ($post->img) \Storage::disk('public')->delete($post->img);
@@ -89,7 +84,19 @@ class PostController extends Controller
             if (count($tags)) PostTag::whereIn('id', $tags->map(function ($v) {return $v->id;}))->delete();
         });
         if (!$post) return response(null, 404);
-        if (!$cat) return response()->json(['cat_id' => ["System can't find designate post cat resource by $request->cat_id."]], 422);
         return $post;
+    }
+
+    public function destroy(int $id)
+    {
+        $post = null;
+        \DB::transaction(function () use ($id, &$post) {
+            $post = Post::where('id', $id)->lockForUpdate()->first();
+            if (!$post) return;
+            PostTag::where('post_id', $id)->delete();
+            $post->delete();
+            if ($post->img) \Storage::disk('public')->delete($post->img);
+        });
+        return !$post ? response(null, 404) : $post;
     }
 }

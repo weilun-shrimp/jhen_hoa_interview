@@ -1,6 +1,12 @@
 <template>
 
     <form class="container p-5 position-relative" :class="{loadding: loadding}" style="max-width: 1200px;" @submit.prevent="submit">
+        <div class="mb-3 row" v-if="post.id">
+            <div class="col px-0">
+                <button class="btn btn-danger" type="button" @click="destroy">DELETE</button>
+            </div>
+        </div>
+
         <div class="mb-3 row">
             <label for="title" class="form-label">Title</label>
             <input type="text" class="form-control" :class="{'is-invalid': errors.title.length}"
@@ -12,7 +18,7 @@
 
         <div class="mb-3 row">
             <label for="img" class="form-label">IMG</label>
-            <input ref="img" class="form-control mb-2" :class="{'is-invalid': errors.img.length}"
+            <input ref="img" class="form-control mb-3" :class="{'is-invalid': errors.img.length}"
             type="file" id="img" accept=".png, .jpg, .jpeg" @change="update_img_preview_src($event); errors.img = []">
             <img v-if="img_preview_src" :src="img_preview_src" id="img_preview" class="d-block mx-auto">
             <div id="img_errors" class="invalid-feedback" v-if="errors.img.length">
@@ -69,7 +75,7 @@
 </template>
 
 <script>
-    import {create, edit, store, update} from '../../models/self/post'
+    import {create, edit, store, update, destroy} from '../../models/self/post'
     export default {
         data() {
             return {
@@ -182,6 +188,20 @@
                 this.tags = []
                 this.img_preview_src = null;
                 ['cat_id', 'img', 'title', 'description', 'content', 'tags'].forEach(v => this.errors[v] = [])
+            },
+
+            destroy() {
+                if (!this.post.id) return
+                this.loadding = true
+                destroy(this.post.id).then(() => {
+                    alert(`Post#${this.post.id} has been deleted.`)
+                    this.$router.push({name: 'post.index'})
+                }).catch(error => {switch (error.status) {
+                    case 404:
+                        alert(`System can't find designate post#${this.$route.params.id}. Maybe this resource has been deleted.`)
+                        this.$router.push({name: 'post.index'})
+                        break
+                }}).then(() => this.loadding = false)
             }
         }
     }
@@ -200,4 +220,7 @@ form.loadding {
     opacity: 0.4;
 }
 
+div:not(.form-floating) > label {
+    padding-left: 0px;
+}
 </style>

@@ -60,5 +60,7 @@ export function update(id, data = {
 }
 
 export function destroy(id) {
-    return self.delete(`/post/${id}`)
+    return self.post(`/post/${id}`, {
+        _method: 'DELETE'
+    })
 }
