@@ -8,11 +8,14 @@ RUN a2enmod rewrite
 RUN a2dissite 000-default.conf
 RUN a2ensite 000-default.conf
 
+RUN apt-get update
+
+RUN apt-get install -y libzip-dev
+RUN apt-get install -y zip
+
 #install php extensions
 RUN docker-php-source extract
-RUN docker-php-ext-install mysqli pdo pdo_mysql
-
-RUN apt-get update
+RUN docker-php-ext-install mysqli pdo pdo_mysql zip
 
 #install git
 RUN apt-get install -y git
@@ -28,16 +31,15 @@ RUN apt-get install -y nodejs
 WORKDIR /var/www/html
 COPY ./src /var/www/html
 
-
-RUN composer install --ignore-platform-reqs
+RUN composer install -n --ignore-platform-reqs
 
 #.env
 RUN cp .env.example .env
 RUN php artisan key:generate
 RUN php artisan storage:link
 RUN php artisan jwt:secret
-RUN php artisan migrate
-RUN php artisan db:seed
 
 RUN npm install
 # npm run dev must do it in docker exec
+
+RUN chmod 777 -R storage

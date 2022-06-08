@@ -11,13 +11,8 @@ Docker, Laravel, JWT Auth, Mysql, Vue, Bootstrap, Scss
 $ docker compose up
 $ docker exec -it wl_interview_php_apache bash
 $ cd /var/www/html
-# $ composer install --ignore-platform-reqs
-# $ npm install
-# $ php artisan key:generate
-# $ php artisan storage:link
-# $ php artisan jwt:secret
-# $ php artisan migrate
-# $ php artisan db:seed
+$ php artisan migrate
+$ php artisan db:seed
 $ npm run dev
 $ exit
 ```
