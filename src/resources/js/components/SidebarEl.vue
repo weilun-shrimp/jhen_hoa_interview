@@ -39,27 +39,9 @@
                         }
                     ]
                 },{
-                    to: {name: 'campaign.index'},
-                    title: 'Campaign',
-                    icon: 'file-text',
-                    open_sub: false,
-                    sub_scroll_height: 0,
-                    subs: [
-                        {
-                            to: {name: 'campaign.create'},
-                            title: 'Create',
-                        }
-                    ]
-                },{
                     to: {name: 'login'},
                     title: 'Login',
-                    icon: 'box-arrow-in-left',
-                    // subs: [
-                    //     {
-                    //         to: {name: 'post.index'},
-                    //         title: 'Create',
-                    //     }
-                    // ]
+                    icon: 'box-arrow-in-left'
                 }
             ])
 

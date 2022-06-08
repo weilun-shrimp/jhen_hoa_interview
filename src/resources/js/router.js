@@ -7,9 +7,6 @@ import FromPage from './pages/post/FromPage.vue'
 
 import PostCatIndex from './pages/post_cat/IndexPage.vue'
 
-import CampaignIndex from './pages/campaign/IndexPage.vue'
-import CampaignCreate from './pages/campaign/CreatePage.vue'
-
 const routes = [
     { path: '/login', component: LoginPage, name: 'login' },
 
@@ -18,10 +15,7 @@ const routes = [
     { path: '/post/create', component: FromPage, name: 'post.create', meta: {requiresAuth: true} },
     { path: '/post/:id/edit', component: FromPage, name: 'post.edit', meta: {requiresAuth: true} },
 
-    { path: '/post_cat', component: PostCatIndex, name: 'post_cat.index', meta: {requiresAuth: true} },
-
-    { path: '/campaign', component: CampaignIndex, name: 'campaign.index' },
-    { path: '/campaign/create', component: CampaignCreate, name: 'campaign.create' },
+    { path: '/post_cat', component: PostCatIndex, name: 'post_cat.index', meta: {requiresAuth: true} }
 ]
 
 import {createRouter, createWebHashHistory} from 'vue-router'

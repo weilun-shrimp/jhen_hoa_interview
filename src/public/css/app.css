@@ -11286,6 +11286,22 @@ textarea.form-control-lg {
     display: none !important;
   }
 }
+/* width */
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+/* Track */
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
 header#header {
   display: flex;
   justify-content: space-between;
@@ -11295,6 +11311,7 @@ header#header {
   min-height: 60px;
   width: 100vw;
   border-bottom: 1px solid #000000;
+  background: rgb(250, 255, 255);
 }
 
 nav#sidebar {
@@ -11350,7 +11367,7 @@ main#mainContent {
   top: 60px;
   left: 220px;
   min-height: calc(100vh - 60px);
-  max-width: calc(100vw - 220px);
+  max-width: calc(100vw - 220px - 5px);
 }
 main#mainContent.full {
   max-width: 100vw;

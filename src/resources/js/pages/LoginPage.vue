@@ -29,7 +29,6 @@
                         </div>
                     </div>
                     <button type="submit" class="btn btn-primary">Submit</button>
-                    <span class="btn btn-primary" @click="test">123</span>
                 </form>
             </div>
         </div>

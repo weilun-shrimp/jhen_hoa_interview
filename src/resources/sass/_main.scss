@@ -3,7 +3,7 @@ main#mainContent {
     top: $header-height;
     left: $sidebar-width;
     min-height: calc(100vh - #{$header-height});
-    max-width: calc(100vw - #{$sidebar-width});
+    max-width: calc(100vw - #{$sidebar-width} - 5px);
 
     &.full {
         max-width: 100vw;
