@@ -1,8 +1,9 @@
 # Weilun Interview
 Docker, Laravel, JWT Auth, Mysql, Vue, Bootstrap, Scss
-*   [Installation - 安裝](#installation---安裝)
+*   [Installation - 安裝](#installation)
     *   [Docker](#docker)
     *   [Straight](#straight)
+*   [Seed User](#seed-user)
     
 ## Installation
 
@@ -44,3 +45,7 @@ After you changed you mysql connection params.
 $ php artisan migrate
 $ php artisan db:seed
 ```
+
+## Seed User
+- email : admin@gmail.com
+- password : admin
