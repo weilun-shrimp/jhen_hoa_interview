@@ -9,7 +9,7 @@ Docker, Laravel, JWT Auth, Mysql, Vue, Bootstrap, Scss
 
 ### Docker
 ```bash
-$ docker compose up
+$ docker compose up --detach
 $ docker exec -it wl_interview_php_apache bash
 $ cd /var/www/html
 $ php artisan migrate
