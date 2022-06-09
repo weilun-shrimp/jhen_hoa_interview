@@ -2,8 +2,6 @@
 
 use Illuminate\Support\Facades\Route;
 
-use App\Http\Controllers\PostController;
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -17,11 +15,6 @@ use App\Http\Controllers\PostController;
 
 Route::get('/', function () {
     return view('welcome');
-});
-
-Route::get('/tt', function () {
-    dd(date('Y-m-d H:i:s'));
-    dd(\Auth::tokenById(1));
 });
 
 Route::get('/spa/{any?}', function() {
