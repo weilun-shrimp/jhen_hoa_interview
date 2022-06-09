@@ -3,7 +3,7 @@ import LoginPage from './pages/LoginPage.vue'
 
 import PostIndex from './pages/post/IndexPage.vue'
 import PostShow from './pages/post/ShowPage.vue'
-import FromPage from './pages/post/FromPage.vue'
+import FormPage from './pages/post/FormPage.vue'
 
 import PostCatIndex from './pages/post_cat/IndexPage.vue'
 
@@ -12,8 +12,8 @@ const routes = [
 
     { path: '/post', component: PostIndex, name: 'post.index', meta: {requiresAuth: true} },
     { path: '/post/:id', component: PostShow, name: 'post.show', meta: {requiresAuth: true} },
-    { path: '/post/create', component: FromPage, name: 'post.create', meta: {requiresAuth: true} },
-    { path: '/post/:id/edit', component: FromPage, name: 'post.edit', meta: {requiresAuth: true} },
+    { path: '/post/create', component: FormPage, name: 'post.create', meta: {requiresAuth: true} },
+    { path: '/post/:id/edit', component: FormPage, name: 'post.edit', meta: {requiresAuth: true} },
 
     { path: '/post_cat', component: PostCatIndex, name: 'post_cat.index', meta: {requiresAuth: true} }
 ]

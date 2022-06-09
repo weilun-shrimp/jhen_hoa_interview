@@ -17,7 +17,9 @@ class PostController extends Controller
         $index = Post::leftjoin((new PostCat)->getTable() . ' as c', 'c.id', '=', 'posts.cat_id')
             ->select('posts.*', 'c.title as c_title')->groupby('posts.id')->orderby('posts.id', 'DESC');
         if ($request->title) $index->where('posts.title', 'like', "%$request->title%");
-        return $index->simplePaginate(24);
+        if ($request->cat_id) $index->where('c.id', $request->cat_id);
+        return ['index' => $index->simplePaginate(24), 'cats' => PostCat::all()];
+
     }
 
     public function show(int $id)

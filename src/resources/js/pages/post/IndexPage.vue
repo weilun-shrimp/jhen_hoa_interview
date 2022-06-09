@@ -8,7 +8,7 @@
         </div>
 
         <div class="row">
-            <filter-form/>
+            <filter-form :cats="cats"/>
         </div>
 
         <div class="row">
@@ -27,7 +27,7 @@
                     </thead>
                     <tbody>
                         <tr v-if="loadding">
-                            <td colspan="6">
+                            <td colspan="7">
                                 <div class="spinner-border d-block mx-auto" role="status">
                                     <span class="visually-hidden">Loading...</span>
                                 </div>
@@ -52,9 +52,9 @@
 </template>
 
 <script>
-    import FilterForm from '../../components/post_cat/FilterForm.vue'
+    import FilterForm from '../../components/post/FilterForm.vue'
 
-    import {index as fetch} from '../../models/self/post'
+    import {index} from '../../models/self/post'
     export default {
 
         data() {
@@ -62,6 +62,8 @@
                 index: [],
                 has_next_page: false,
                 has_prev_page: false,
+
+                cats: [],
 
                 loadding: false
             }
@@ -84,10 +86,12 @@
         methods: {
             fetchIndex() {
                 this.loadding = true
-                fetch(this.$route.query).then(res => {
-                    this.index = res.data.data
-                    this.has_next_page = !!res.data.next_page_url
-                    this.has_prev_page = !!res.data.prev_page_url
+                index(this.$route.query).then(res => {
+                    this.index = res.data.index.data
+                    this.has_next_page = !!res.data.index.next_page_url
+                    this.has_prev_page = !!res.data.index.prev_page_url
+
+                    this.cats = res.data.cats
                 }).catch(() => {return}).then(() => this.loadding = false)
             },
 

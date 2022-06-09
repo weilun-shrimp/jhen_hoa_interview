@@ -31,7 +31,7 @@ self.interceptors.response.use(res => {
             alert(`Encounter server error. Your request not complete. Please contact tech support. Hint: ${error.config.url}`);
             break
         case 401:
-            switch (error.response.data.type) {
+            if (router.currentRoute.value.name !== 'login') switch (error.response.data.type) {
                 case 'notProvide': alert('You need to login first.'); break
                 case 'expired': alert('You have overed authorized period. Please login again.'); break
                 case 'unauthorized': alert('You are unauthorized. Please login.'); break
